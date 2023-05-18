@@ -28,3 +28,27 @@ class HoresplayoneItem(scrapy.Item):
     #time/date
     race_time = scrapy.Field()
     race_date = scrapy.Field()
+
+class HorseProfileItem(scrapy.Item):
+	h_name = scrapy.Field()
+	h_uid =  scrapy.Field()
+	h_sex = scrapy.Field()
+	
+	c_origin = scrapy.Field()
+	sire_c_origin = scrapy.Field()
+	sire_avg_flat = scrapy.Field()
+	sire_avg_dist = scrapy.Field() 
+	
+	dam_c_origin = scrapy.Field()
+	damSire_c_origin = scrapy.Field()
+	damSire_avg_flat = scrapy.Field()
+	damSire_avg_dist = scrapy.Field() 
+
+	trainer_uid = scrapy.Field()
+	trainer_name = scrapy.Field()
+	trainer_14_perc = scrapy.Field()
+	trainer_14_runs = scrapy.Field()
+	trainer_14_wins = scrapy.Field()
+
+	medical = scrapy.Field()
+

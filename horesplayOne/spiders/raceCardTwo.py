@@ -6,6 +6,7 @@ class RacecardtwoSpider(scrapy.Spider):
     allowed_domains = ['racingpost.com']
     start_urls = ['http://racingpost.com/racecards/time-order']
 
+    #retreive urls from list of day's races
     def parse(self, response):
   
     	urls = response.css('.RC-meetingItem__link::attr(href)')
@@ -14,6 +15,7 @@ class RacecardtwoSpider(scrapy.Spider):
     		pri = pri - 1
     		yield scrapy.Request('http://racingpost.com' + url.get(), callback = self.parse2, priority=pri)
 
+    #scrape horse and race details from each of the day's races. Race details added to each horse.
     def parse2(self, response):
     	card = response.css('.RC-runnerCardWrapper , .RC-courseHeader, .RC-headerBox')
     	#course
