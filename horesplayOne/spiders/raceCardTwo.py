@@ -31,7 +31,7 @@ class RacecardtwoSpider(scrapy.Spider):
     	time = card.css('.RC-courseHeader__time::text').get(default='').strip()
     	date = card.css('.RC-courseHeader__date::text').get(default='').strip()
     	 
-    	
+    	#loop over each horse, extract details. 
     	h_item = HoresplayoneItem()
     	for horse in card:
     		h_item['h_name'] = horse.css('.RC-runnerName::text').get(default='').strip()

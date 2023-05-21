@@ -5,16 +5,52 @@
 
 import scrapy
 
-
-class HoresplayoneItem(scrapy.Item):
-    
-    #Runner details
+#Items relevent to results page crawl, and subsequent model. 
+class ResultItem(scrapy.Item):
     h_name = scrapy.Field()
+    h_uid = scrapy.Field()
+    wgt = scrapy.Field()
+    co_code = scrapy.Field()#horse country code
+    
+    finish = scrapy.Field()
     draw = scrapy.Field()
     age  = scrapy.Field()
     OR = scrapy.Field()
     rpr = scrapy.Field()
     ts = scrapy.Field()
+    sp = scrapy.Field()
+
+    trainer_uid = scrapy.Field()
+    trainer_url = scrapy.Field()
+        
+    jockey_uid = scrapy.Field()
+    jockey_url = scrapy.Field()
+
+    sire_uid = scrapy.Field()
+    dam_uid = scrapy.Field()
+    damSire_uid = scrapy.Field()
+
+    course_n = scrapy.Field()
+    race_id = scrapy.Field()
+    going = scrapy.Field()
+    distance = scrapy.Field()
+    round_distance = scrapy.Field()
+    class_r = scrapy.Field()
+
+    race_time = scrapy.Field()
+    race_date = scrapy.Field()
+#More for initial test, and use specifically with racecards, as opposed to results.
+class HoresplayoneItem(scrapy.Item):
+    
+    #Runner details
+    h_name = scrapy.Field()
+    h_uid = scrapy.Field()
+    draw = scrapy.Field()
+    finish = scrapy.Field()
+    age  = scrapy.Field()
+    OR = scrapy.Field()
+    rpr = scrapy.Field()
+    ts = scrapy.Field() 
     tr = scrapy.Field()
     form = scrapy.Field()
     #race details
@@ -29,6 +65,7 @@ class HoresplayoneItem(scrapy.Item):
     race_time = scrapy.Field()
     race_date = scrapy.Field()
 
+#For use with posible pedegree features, eventually.  
 class HorseProfileItem(scrapy.Item):
 	h_name = scrapy.Field()
 	h_uid =  scrapy.Field()
