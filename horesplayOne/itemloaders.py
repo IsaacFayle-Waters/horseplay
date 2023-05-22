@@ -5,8 +5,8 @@ class ResultLoader(ItemLoader):
 	default_output_processor = TakeFirst()
 	h_name_in = MapCompose(lambda x : x.strip())
 	h_uid_in = MapCompose(lambda x : x.split('/')[-2])
-	wgt_in = MapCompose(lambda x : x.strip()) 
-	wgt_out = Join('-')
+	#wgt_in = MapCompose(lambda x : x.strip()) 
+	#wgt_out = Join('-')
 	finish_in = MapCompose(lambda x : x.split())
 	draw_in =  MapCompose(lambda x : x.strip().replace('(','').replace(')',''))
 	age_in = MapCompose(lambda x : x.strip())
@@ -23,3 +23,4 @@ class ResultLoader(ItemLoader):
 	damSire_uid_in = MapCompose(lambda x :x.split('/')[-2])
 	
 	course_n_in = MapCompose(lambda x : x.strip())
+	class_r_in = MapCompose(lambda x : x.strip())

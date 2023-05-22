@@ -21,7 +21,7 @@ class ResultsSpider(scrapy.Spider):
         for slug in linkTable:
         	url = 'http://www.racingpost.com'
         	yield scrapy.Request(url + slug.get(), callback=self.parse)
-    #DO STUFF    	
+    #PARSE INFORMATION PER HORSE PER RACE    	
     async def parse(self, response):
     	raceInfo = response.css('.rp-raceTimeCourseName')
     	tableSel = response.css('[data-test-selector="table-row"]')
@@ -31,16 +31,23 @@ class ResultsSpider(scrapy.Spider):
     	race_date = raceInfo.css('.rp-raceTimeCourseName__date::text').get().strip()
     	going = raceInfo.css('.rp-raceTimeCourseName_condition::text').get().strip()
     	distance = raceInfo.css('.rp-raceTimeCourseName_distance::text').get().strip()
-    	class_r = raceInfo.css('.rp-raceTimeCourseName_distance::text').get().strip()
+    	class_r = raceInfo.css('.rp-raceTimeCourseName_class::text').get()
+    	#scraped from jsString
     	js = response.css('script')[12].get()
     	race_id = jsStripper(js,'raceId')
+    	race_type = jsStripper(js,'raceTypeCode')
+    	jScount = 0
+    	
     	#per horse details
     	for horse in tableSel:
     		result = ResultLoader(item=ResultItem(), selector = horse)
+
     		result.add_css('h_name', 'a[data-test-selector="link-horseName"]::text')
     		result.add_css('h_uid', 'a[data-test-selector="link-horseName"]::attr(href)')
-    		result.add_css('wgt','[data-ending="st"]::text')
-    		result.add_css('wgt','[data-ending="lb"]::text')
+    		#result.add_css('wgt','[data-ending="st"]::text')
+    		#result.add_css('wgt','[data-ending="lb"]::text')
+    		wgt = jsStripper(js,'wgtStNative','items',jScount)
+    		result.add_value('wgt', wgt)
     		result.add_css('finish','[data-test-selector="text-horsePosition"]::text')
     		result.add_css('draw', '.rp-horseTable__pos__draw::text')
     		result.add_css('age', '[data-ending="yo"]::text')
@@ -48,15 +55,20 @@ class ResultsSpider(scrapy.Spider):
     		result.add_css('rpr','[data-ending="RPR"]::text')
     		result.add_css('ts','[data-ending="TS"]::text')
     		result.add_css('sp', '.rp-horseTable__horse__price::text')
+    		length = jsStripper(js,'accumLengthNative','items',jScount)
+    		result.add_value('length', length)
     		result.add_css('co_code', '.rp-horseTable__horse__country::text')
-
+    		
     		result.add_css('jockey_uid', '[data-test-selector="link-jockeyName"]:not(.ui-link_marked)::attr(href)')
+    		jockey_wgt_al = jsStripper(js,'wgtAllowance','items',jScount)
+    		result.add_value('jockey_wgt_al',jockey_wgt_al)
     		result.add_css('trainer_uid','[data-test-selector="link-trainerName"]::attr(href)')
     		result.add_css('sire_uid', '[data-test-selector="table-row"] ~ [data-test-selector="block-pedigreeInfoFullResults"] td a:nth-child(1)::attr(href)')
     		result.add_css('dam_uid', '[data-test-selector="table-row"] ~ [data-test-selector="block-pedigreeInfoFullResults"] td a:nth-child(2)::attr(href)')
     		result.add_css('damSire_uid','[data-test-selector="table-row"] ~ [data-test-selector="block-pedigreeInfoFullResults"] td a:nth-child(3)::attr(href)')
 
     		result.add_value('course_n',course_n)
+    		result.add_value('race_type',race_type)
     		result.add_value('going', going)
     		result.add_value('distance', distance)
     		result.add_value('class_r', class_r)
@@ -64,9 +76,10 @@ class ResultsSpider(scrapy.Spider):
     		result.add_value('race_date',race_date)
     		result.add_value('race_id',race_id)
 
-
     		result.add_css('jockey_url', '[data-test-selector="link-jockeyName"]:not(.ui-link_marked)::attr(href)')
     		result.add_css('trainer_url', '[data-test-selector="link-trainerName"]::attr(href)' )
+    		
+    		jScount = jScount + 1
     		yield result.load_item()
 
     	#Take the date added at start, advance date by one day, repeat until no more tomorrows.

@@ -19,11 +19,13 @@ class ResultItem(scrapy.Item):
     rpr = scrapy.Field()
     ts = scrapy.Field()
     sp = scrapy.Field()
+    length =scrapy.Field()#lengths behind winner. Poss define default?
 
     trainer_uid = scrapy.Field()
     trainer_url = scrapy.Field()
         
     jockey_uid = scrapy.Field()
+    jockey_wgt_al = scrapy.Field()
     jockey_url = scrapy.Field()
 
     sire_uid = scrapy.Field()
@@ -32,6 +34,7 @@ class ResultItem(scrapy.Item):
 
     course_n = scrapy.Field()
     race_id = scrapy.Field()
+    race_type = scrapy.Field()
     going = scrapy.Field()
     distance = scrapy.Field()
     round_distance = scrapy.Field()
@@ -39,6 +42,9 @@ class ResultItem(scrapy.Item):
 
     race_time = scrapy.Field()
     race_date = scrapy.Field()
+
+    test = scrapy.Field() 
+
 #More for initial test, and use specifically with racecards, as opposed to results.
 class HoresplayoneItem(scrapy.Item):
     
