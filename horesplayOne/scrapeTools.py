@@ -1,4 +1,5 @@
 import json
+import random
 #Strip down js string/window data, convert it to json to then return a value from a particular key
 #Section references a key with an array and index is used to acess that array.
 def jsStripper (jscript, key,section=0,index=0):
@@ -24,4 +25,12 @@ def jsStripper (jscript, key,section=0,index=0):
 #Print(awnser2)
 """
 
+def randomJsonSample(jsonFile):
+	with open(jsonFile,'r') as f:
+		data = json.load(f)
 
+	for i in range(10):
+		print(random.choice(data))
+		print('')
+
+#randomJsonSample('fullTest.json')

@@ -23,4 +23,10 @@ class ResultLoader(ItemLoader):
 	damSire_uid_in = MapCompose(lambda x :x.split('/')[-2])
 	
 	course_n_in = MapCompose(lambda x : x.strip())
-	class_r_in = MapCompose(lambda x : x.strip())
+	class_r_in = MapCompose(lambda x : x.strip().replace('(Class ','').replace(')',''))
+	distance_in = MapCompose(lambda x : x.strip())
+	going_in  = MapCompose(lambda x : x.strip())
+	race_date_in = MapCompose(lambda x : x.strip())
+	race_time_in = MapCompose(lambda x : x.strip())
+
+	test_in = MapCompose(lambda x : x.strip())

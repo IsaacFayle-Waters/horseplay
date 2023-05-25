@@ -62,9 +62,12 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'horesplayOne.pipelines.HoresplayonePipeline': 300,
-#}
+ITEM_PIPELINES = {
+    #'horesplayOne.pipelines.HoresplayonePipeline': 300,
+    'horesplayOne.pipelines.DistancePipeline': 1,
+    'horesplayOne.pipelines.SpPipeline': 2,
+    'horesplayOne.pipelines.DatatypePipeline': 3,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

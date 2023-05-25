@@ -4,6 +4,8 @@ from horesplayOne.items import ResultItem
 from horesplayOne.itemloaders import ResultLoader
 from horesplayOne.scrapeTools import jsStripper
 
+TESTING = False
+TEST_INDEX = 1
 
 class ResultsSpider(scrapy.Spider):
     name = 'results'
@@ -16,21 +18,44 @@ class ResultsSpider(scrapy.Spider):
     	yield scrapy.Request(url, callback = self.getUrls)
     #GET URLS OF ALL RACES ON THAT DAY
     async def getUrls(self, response):
-        linkTable = response.css('a[data-test-selector="link-listCourseNameLink"]::attr(href)')
+    	if TESTING == False:
 
-        for slug in linkTable:
-        	url = 'http://www.racingpost.com'
-        	yield scrapy.Request(url + slug.get(), callback=self.parse)
+    		#list of accepted countries (UK is automatically accepted)
+    		accptList = ['(IRE)']
+    		raceitem = response.css('.rp-timeView__listItem')
+    		#if not UK race, and not Irish race, don't yield url
+    		for item in raceitem:
+    			url = 'http://www.racingpost.com'
+    			#If item has country code
+    			if item.css('.rp-timeView__raceName__code::text').get():
+    				cc = item.css('.rp-timeView__raceName__code::text').get().strip()
+    				#If country code accepted
+    				if cc in accptList:
+    					path = item.css('.rp-timeView__raceTitle a::attr(href)')
+    					yield scrapy.Request(url + path.get(), callback=self.parse)
+    			#If no code, it's a UK race, so yield
+    			else:
+    				path = item.css('.rp-timeView__raceTitle a::attr(href)')
+    				yield scrapy.Request(url + path.get(), callback=self.parse)
+
+	        	#yield scrapy.Request(url + .get(), callback=self.parse)
+    	
+    	
+    	elif TESTING == True:
+    		path = response.css('.rp-timeView__raceTitle a::attr(href)')[TEST_INDEX].get()
+    		url = 'http://www.racingpost.com' + path
+    		yield scrapy.Request(url, callback=self.parse)
+
     #PARSE INFORMATION PER HORSE PER RACE    	
     async def parse(self, response):
     	raceInfo = response.css('.rp-raceTimeCourseName')
     	tableSel = response.css('[data-test-selector="table-row"]')
     	#per race details, for classification
-    	course_n = raceInfo.css('.rp-raceTimeCourseName__name::text').get().strip()
-    	race_time = raceInfo.css('.rp-raceTimeCourseName__time::text').get().strip()
-    	race_date = raceInfo.css('.rp-raceTimeCourseName__date::text').get().strip()
-    	going = raceInfo.css('.rp-raceTimeCourseName_condition::text').get().strip()
-    	distance = raceInfo.css('.rp-raceTimeCourseName_distance::text').get().strip()
+    	course_n = raceInfo.css('.rp-raceTimeCourseName__name::text').get()
+    	race_time = raceInfo.css('.rp-raceTimeCourseName__time::text').get()
+    	race_date = raceInfo.css('.rp-raceTimeCourseName__date::text').get()
+    	going = raceInfo.css('.rp-raceTimeCourseName_condition::text').get()
+    	distance = raceInfo.css('.rp-raceTimeCourseName_distance::text').get()
     	class_r = raceInfo.css('.rp-raceTimeCourseName_class::text').get()
     	#scraped from jsString
     	js = response.css('script')[12].get()
@@ -41,11 +66,8 @@ class ResultsSpider(scrapy.Spider):
     	#per horse details
     	for horse in tableSel:
     		result = ResultLoader(item=ResultItem(), selector = horse)
-
     		result.add_css('h_name', 'a[data-test-selector="link-horseName"]::text')
     		result.add_css('h_uid', 'a[data-test-selector="link-horseName"]::attr(href)')
-    		#result.add_css('wgt','[data-ending="st"]::text')
-    		#result.add_css('wgt','[data-ending="lb"]::text')
     		wgt = jsStripper(js,'wgtStNative','items',jScount)
     		result.add_value('wgt', wgt)
     		result.add_css('finish','[data-test-selector="text-horsePosition"]::text')
