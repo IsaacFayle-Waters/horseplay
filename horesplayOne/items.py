@@ -15,7 +15,7 @@ class ResultItem(scrapy.Item):
     finish = scrapy.Field()
     draw = scrapy.Field()
     age  = scrapy.Field()
-    OR = scrapy.Field()
+    or_ = scrapy.Field()
     rpr = scrapy.Field()
     ts = scrapy.Field()
     sp = scrapy.Field()

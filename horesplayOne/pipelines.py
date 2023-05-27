@@ -5,6 +5,7 @@
 
 
 # useful for handling different item types with a single interface
+import sqlite3
 from itemadapter import ItemAdapter
 
 
@@ -59,8 +60,8 @@ class DatatypePipeline:
 		if adapter.get('age'):
 			adapter['age'] = int(adapter['age'])
 		
-		if adapter.get('OR'):
-			adapter['OR'] = int(adapter['OR'].replace('\u2013','0'))
+		if adapter.get('or_'):
+			adapter['or_'] = int(adapter['or_'].replace('\u2013','0'))
 		
 		if adapter.get('rpr'):
 			adapter['rpr'] = int(adapter['rpr'].replace('\u2013','0'))
@@ -68,4 +69,61 @@ class DatatypePipeline:
 		if adapter.get('ts'):
 			adapter['ts'] = int(adapter['ts'].replace('\u2013','0'))
 			
+		return item
+
+class SetDefaultPipeline:
+	def process_item(self,item,spider):
+		for field in item.fields:
+			item.setdefault(field, 'NULL')
+
+		return item
+
+
+class DatabasePipeline:
+	def __init__(self):
+		self.con = sqlite3.connect('testScrape.db')
+		self.cur = self.con.cursor()
+		self.create_table()
+
+	def create_table(self):
+		self.cur.execute("""CREATE TABLE IF NOT EXISTS horses(h_name TEXT,
+															  h_uid INTEGER,
+															  wgt INTEGER,
+															   co_code TEXT,
+															   finish TEXT,
+															   draw INTEGER,
+															   age INTEGER,
+															   or_ INTEGER,
+															   rpr INTEGER,
+															   ts INTEGER,
+															   sp REAL,
+															   length REAL,
+															   trainer_uid INTEGER,
+															   trainer_url TEXT,
+															   jockey_uid INTEGER,
+															   jockey_wgt_al INTEGER,
+															   jockey_url TEXT,
+															   sire_uid INTEGER,
+															   dam_uid INTEGER,
+															   damSire_uid INTEGER,
+															   course_n TEXT,
+															   race_id INTEGER,
+															   race_type TEXT,
+															   going TEXT,
+															   distance REAL,
+															   class_r INTEGER,
+															   race_time TEXT,
+															   race_date TEXT)""")
+
+
+	def process_item(self,item,spider):
+		self.cur.execute("""INSERT INTO horses VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+							(item['h_name'], item['h_uid'], item['wgt'],item['co_code'],
+								item['finish'], item['draw'], item['age'], item['or_'], item['rpr'], item['ts'],
+								 item['sp'], item['length'], item['trainer_uid'], item['trainer_url'], item['jockey_uid'],
+								  item['jockey_wgt_al'], item['jockey_url'], item['sire_uid'], item['dam_uid'], item['damSire_uid'],
+								   item['course_n'], item['race_id'], item['race_type'], item['going'], item['distance'],
+								    item['class_r'], item['race_time'], item['race_date']))
+		self.con.commit()
+
 		return item

@@ -10,7 +10,7 @@ class ResultLoader(ItemLoader):
 	finish_in = MapCompose(lambda x : x.split())
 	draw_in =  MapCompose(lambda x : x.strip().replace('(','').replace(')',''))
 	age_in = MapCompose(lambda x : x.strip())
-	OR_in = MapCompose(lambda x : x.strip())
+	or__in = MapCompose(lambda x : x.strip())
 	rpr_in = MapCompose(lambda x : x.strip())
 	ts_in  = MapCompose(lambda x : x.strip())
 	sp_in = MapCompose(lambda x : x.strip())

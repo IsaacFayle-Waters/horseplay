@@ -33,4 +33,7 @@ def randomJsonSample(jsonFile):
 		print(random.choice(data))
 		print('')
 
-#randomJsonSample('fullTest.json')
+def quickJson(jsonFile):
+	with open(jsonFile,'r') as f:
+		data = json.load(f)
+	return data

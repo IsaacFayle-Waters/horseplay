@@ -67,6 +67,8 @@ ITEM_PIPELINES = {
     'horesplayOne.pipelines.DistancePipeline': 1,
     'horesplayOne.pipelines.SpPipeline': 2,
     'horesplayOne.pipelines.DatatypePipeline': 3,
+    'horesplayOne.pipelines.SetDefaultPipeline': 4,
+    'horesplayOne.pipelines.DatabasePipeline': 5,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -5,7 +5,7 @@ from horesplayOne.itemloaders import ResultLoader
 from horesplayOne.scrapeTools import jsStripper
 
 TESTING = False
-TEST_INDEX = 1
+TEST_INDEX = 0
 
 class ResultsSpider(scrapy.Spider):
     name = 'results'
@@ -36,10 +36,7 @@ class ResultsSpider(scrapy.Spider):
     			#If no code, it's a UK race, so yield
     			else:
     				path = item.css('.rp-timeView__raceTitle a::attr(href)')
-    				yield scrapy.Request(url + path.get(), callback=self.parse)
-
-	        	#yield scrapy.Request(url + .get(), callback=self.parse)
-    	
+    				yield scrapy.Request(url + path.get(), callback=self.parse)  	
     	
     	elif TESTING == True:
     		path = response.css('.rp-timeView__raceTitle a::attr(href)')[TEST_INDEX].get()
@@ -73,7 +70,7 @@ class ResultsSpider(scrapy.Spider):
     		result.add_css('finish','[data-test-selector="text-horsePosition"]::text')
     		result.add_css('draw', '.rp-horseTable__pos__draw::text')
     		result.add_css('age', '[data-ending="yo"]::text')
-    		result.add_css('OR','[data-ending="OR"]::text')
+    		result.add_css('or_','[data-ending="OR"]::text')
     		result.add_css('rpr','[data-ending="RPR"]::text')
     		result.add_css('ts','[data-ending="TS"]::text')
     		result.add_css('sp', '.rp-horseTable__horse__price::text')
