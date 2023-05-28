@@ -1,5 +1,6 @@
-import scrapy
+#FOR INITIAL TESTS ONLY. WILL BE REMOVED
 
+import scrapy
 
 class RacecardSpider(scrapy.Spider):
     name = 'raceCard'

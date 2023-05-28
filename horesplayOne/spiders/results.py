@@ -16,7 +16,8 @@ class ResultsSpider(scrapy.Spider):
     	date = self.date
     	url = 'http://racingpost.com/results/' + date + '/time-order'
     	yield scrapy.Request(url, callback = self.getUrls)
-    #GET URLS OF ALL RACES ON THAT DAY
+    
+    #GET URLS OF ALL RACES ON THE DATE SUPPLIED ABOVE
     async def getUrls(self, response):
     	if TESTING == False:
 
@@ -25,23 +26,44 @@ class ResultsSpider(scrapy.Spider):
     		raceitem = response.css('.rp-timeView__listItem')
     		#if not UK race, and not Irish race, don't yield url
     		for item in raceitem:
-    			url = 'http://www.racingpost.com'
-    			#If item has country code
-    			if item.css('.rp-timeView__raceName__code::text').get():
-    				cc = item.css('.rp-timeView__raceName__code::text').get().strip()
-    				#If country code accepted
-    				if cc in accptList:
-    					path = item.css('.rp-timeView__raceTitle a::attr(href)')
-    					yield scrapy.Request(url + path.get(), callback=self.parse)
-    			#If no code, it's a UK race, so yield
+    			#Don't record voided races 
+    			if item.css('.rp-voidRace__description') or item.css('.rp-raceAbandoned'):
+    				pass
     			else:
-    				path = item.css('.rp-timeView__raceTitle a::attr(href)')
-    				yield scrapy.Request(url + path.get(), callback=self.parse)  	
-    	
+        			url = 'http://www.racingpost.com'
+        			#If item has country code
+        			if item.css('.rp-timeView__raceName__code::text').get():
+        				cc = item.css('.rp-timeView__raceName__code::text').get().strip()
+        				#If country code accepted, yield full url
+        				if cc in accptList:
+        					path = item.css('.rp-timeView__raceTitle a::attr(href)')
+        					yield scrapy.Request(url + path.get(), callback=self.parse)
+        			#If no code, it's a UK race, so yield
+        			else:
+        				path = item.css('.rp-timeView__raceTitle a::attr(href)')
+        				try:
+        					yield scrapy.Request(url + path.get(), callback=self.parse)
+        				except TypeError:
+        					pass   	
+    	#TESTING ONLY
     	elif TESTING == True:
     		path = response.css('.rp-timeView__raceTitle a::attr(href)')[TEST_INDEX].get()
     		url = 'http://www.racingpost.com' + path
     		yield scrapy.Request(url, callback=self.parse)
+    	
+    	#Take the date added at start, advance date by one day, repeat until no more tomorrows.
+    	y,m,d = self.date.split('-')
+    	date = datetime.date(int(y),int(m),int(d))
+    	delta = datetime.timedelta(days = 1)
+    	date += delta
+    	date = date.strftime("%Y-%m-%d")
+    	self.date = date
+    	next_page = 'https://www.racingpost.com/results/' + date + '/time-order'
+    	
+    	if next_page is not None:
+    		yield response.follow(next_page,callback = self.getUrls)
+
+
 
     #PARSE INFORMATION PER HORSE PER RACE    	
     async def parse(self, response):
@@ -100,15 +122,3 @@ class ResultsSpider(scrapy.Spider):
     		
     		jScount = jScount + 1
     		yield result.load_item()
-
-    	#Take the date added at start, advance date by one day, repeat until no more tomorrows.
-    	y,m,d = self.date.split('-')
-    	date = datetime.date(int(y),int(m),int(d))
-    	delta = datetime.timedelta(days = 1)
-    	date += delta
-    	date = date.strftime("%Y-%m-%d")
-    	
-    	next_page = 'https://www.racingpost.com/results/' + date + '/time-order'
-
-    	if next_page is not None:
-    		yield response.follow(next_page,callback = self.getUrls)

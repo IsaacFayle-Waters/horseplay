@@ -8,7 +8,8 @@
 import sqlite3
 from itemadapter import ItemAdapter
 
-
+DB_NAME = 'moreTesting2.db'
+#UKandIREfromJun2020.db
 class HoresplayonePipeline:
     def process_item(self, item, spider):
         return item
@@ -42,7 +43,7 @@ class SpPipeline:
 		adapter = ItemAdapter(item)
 
 		if adapter.get('sp'):
-			adapter['sp'] = adapter['sp'].replace('F','').replace('J','').replace('Evens','1/1')
+			adapter['sp'] = adapter['sp'].replace('F','').replace('J','').replace('C','').replace('Evens','1/1')
 			num,den = adapter['sp'].split('/')
 			num,den = int(num),int(den)
 			odds = (den / (num + den))
@@ -81,7 +82,7 @@ class SetDefaultPipeline:
 
 class DatabasePipeline:
 	def __init__(self):
-		self.con = sqlite3.connect('testScrape.db')
+		self.con = sqlite3.connect(DB_NAME)
 		self.cur = self.con.cursor()
 		self.create_table()
 
