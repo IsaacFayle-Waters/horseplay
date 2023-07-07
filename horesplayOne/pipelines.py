@@ -11,7 +11,7 @@ from itemadapter import ItemAdapter
 
 nullInteger = -1
 
-DB_NAME = 'rcThreeTesting.db'
+DB_NAME = 'rcThreeFurtherTestingTwo.db'
 #UKandIREfromJun2020.db
 class HoresplayonePipeline:
     def process_item(self, item, spider):

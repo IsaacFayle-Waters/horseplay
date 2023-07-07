@@ -29,7 +29,7 @@ class RacecardthreeSpider(scrapy.Spider):
     	race_id = response.url
 
     	title = response.css('[data-test-selector="RC-header__raceInstanceTitle"]::text').get().strip()
-    	race_type = raceTypeGet(title) 
+    	race_type = raceTypeGet(title,course_n) 
 
     	#per horse details
     	for horse in horses:

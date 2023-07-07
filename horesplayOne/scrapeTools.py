@@ -42,21 +42,25 @@ def quickJson(jsonFile):
 		data = json.load(f)
 	return data
 
-def raceTypeGet(title):
+def raceTypeGet(title,course_n):
 	B = ["inh flat", "national hunt flat","bumper"]
-	C = []
-	H = []
-	U = []
-	X = []
-	if title.lower() in B: 
-		return 'B'
-	elif title.lower() in C:
-		return 'C'
-	elif title.lower() in H:
-		return 'H'
-	elif title.lower() in U:
-		return 'U'
-	elif title.lower() in X:
+	C = ['chase']
+	H = ['hurdle']
+	U = ['hunter\'s chase', 'hunters chase', 'national hunt steeplechase']
+	X = '(AW)'
+	exlist = ['(HK)','(FR)','(SAF)','(USA)', '(JPN)', '(KSA)', '(CAN)', '(ITA)', '(GER)']
+	
+	if X in course_n:
 		return 'X'
+	elif course_n.split(' ')[-1] in exlist: 
+		return 'N'
+	elif [x for x in B if x in title.lower()]: 
+		return 'B'
+	elif [x for x in U if x in title.lower()]:
+		return 'U'
+	elif [x for x in H if x in title.lower()]:
+		return 'H'
+	elif [x for x in C if x in title.lower()]:
+		return 'C'
 	else:
 		return 'F'
