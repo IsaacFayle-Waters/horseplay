@@ -24,6 +24,10 @@ def jsStripper (jscript, key,section=0,index=0):
 #print(awnser)
 #Print(awnser2)
 """
+def wgtStripper(wgtString):
+	start = wgtString.find('wgt="')
+	end = wgtString.find('">\n')
+	return wgtString[start + 5:end]
 
 def randomJsonSample(jsonFile):
 	with open(jsonFile,'r') as f:
@@ -37,3 +41,22 @@ def quickJson(jsonFile):
 	with open(jsonFile,'r') as f:
 		data = json.load(f)
 	return data
+
+def raceTypeGet(title):
+	B = ["inh flat", "national hunt flat","bumper"]
+	C = []
+	H = []
+	U = []
+	X = []
+	if title.lower() in B: 
+		return 'B'
+	elif title.lower() in C:
+		return 'C'
+	elif title.lower() in H:
+		return 'H'
+	elif title.lower() in U:
+		return 'U'
+	elif title.lower() in X:
+		return 'X'
+	else:
+		return 'F'

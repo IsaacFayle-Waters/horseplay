@@ -21,7 +21,7 @@ class ResultLoader(ItemLoader):
 	sire_uid_in = MapCompose(lambda x :x.split('/')[-2])
 	dam_uid_in = MapCompose(lambda x :x.split('/')[-2])
 	damSire_uid_in = MapCompose(lambda x :x.split('/')[-2])
-	
+		
 	course_n_in = MapCompose(lambda x : x.strip())
 	class_r_in = MapCompose(lambda x : x.strip().replace('(Class ','').replace(')',''))
 	distance_in = MapCompose(lambda x : x.strip())
@@ -30,3 +30,7 @@ class ResultLoader(ItemLoader):
 	race_time_in = MapCompose(lambda x : x.strip())
 
 	test_in = MapCompose(lambda x : x.strip())
+
+class RaceCardLoader(ResultLoader):
+	race_id_in = MapCompose(lambda x :x.split('/')[-1])
+	jockey_wgt_al_in = MapCompose(lambda x : x.strip())

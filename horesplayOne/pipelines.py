@@ -6,9 +6,12 @@
 
 # useful for handling different item types with a single interface
 import sqlite3
+import numpy as np
 from itemadapter import ItemAdapter
 
-DB_NAME = 'moreTesting2.db'
+nullInteger = -1
+
+DB_NAME = 'rcThreeTesting.db'
 #UKandIREfromJun2020.db
 class HoresplayonePipeline:
     def process_item(self, item, spider):
@@ -33,7 +36,6 @@ class DistancePipeline:
 					distance = float(distance[0])
 				else:
 					distance = distance[0] + float(distance[1])
-				
 			adapter['distance'] = distance
 			return item
 
@@ -41,20 +43,22 @@ class DistancePipeline:
 class SpPipeline:
 	def process_item(self,item,spider):
 		adapter = ItemAdapter(item)
-
 		if adapter.get('sp'):
-			adapter['sp'] = adapter['sp'].replace('F','').replace('J','').replace('C','').replace('Evens','1/1')
-			num,den = adapter['sp'].split('/')
-			num,den = int(num),int(den)
-			odds = (den / (num + den))
-			adapter['sp'] = odds
+			if not 'NULL':
+				adapter['sp'] = adapter['sp'].replace('F','').replace('J','').replace('C','').replace('Evens','1/1')
+				num,den = adapter['sp'].split('/')
+				num,den = int(num),int(den)
+				odds = (den / (num + den))
+				adapter['sp'] = odds
+			else:
+				adapter['sp'] = nullInteger
+			
 			return item
 
 
 class DatatypePipeline:
 	def process_item(self,item,spider):
 		adapter = ItemAdapter(item)
-
 		if adapter.get('draw'):
 			adapter['draw'] = int(adapter['draw'])
 		
@@ -62,20 +66,27 @@ class DatatypePipeline:
 			adapter['age'] = int(adapter['age'])
 		
 		if adapter.get('or_'):
-			adapter['or_'] = int(adapter['or_'].replace('\u2013','0'))
+			#adapter['or_'].replace('\u2013',nullInteger)
+			adapter['or_'] = adapter['or_'].replace('-',str(nullInteger)).replace('\u2013',str(nullInteger))		
 		
 		if adapter.get('rpr'):
-			adapter['rpr'] = int(adapter['rpr'].replace('\u2013','0'))
-
+			#adapter['rpr'].replace('\u2013',nullInteger)
+			adapter['rpr'] = adapter['rpr'].replace('-',str(nullInteger)).replace('\u2013',str(nullInteger))
+		
 		if adapter.get('ts'):
-			adapter['ts'] = int(adapter['ts'].replace('\u2013','0'))
-			
+			#adapter['ts'].replace('\u2013',nullInteger)
+			adapter['ts'] = adapter['ts'].replace('-',str(nullInteger)).replace('\u2013',str(nullInteger))
+		
 		return item
 
 class SetDefaultPipeline:
 	def process_item(self,item,spider):
 		for field in item.fields:
+			item.setdefault('draw', nullInteger)
+			item.setdefault('age', nullInteger)
+			item.setdefault('or_', nullInteger)
 			item.setdefault(field, 'NULL')
+
 
 		return item
 

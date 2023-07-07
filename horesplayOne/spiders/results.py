@@ -11,7 +11,7 @@ class ResultsSpider(scrapy.Spider):
     name = 'results'
     allowed_domains = ['www.racingpost.com']
     
-    #START FROM DATE PROVIDED ON CRAWL (i.e. scrapy crawl results -a date = 2022-05-17 )
+    #START FROM DATE PROVIDED ON CRAWL (i.e. scrapy crawl results -a date = 2023-05-30 )
     def start_requests(self):
     	date = self.date
     	url = 'http://racingpost.com/results/' + date + '/time-order'

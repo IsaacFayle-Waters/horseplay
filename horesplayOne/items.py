@@ -45,6 +45,10 @@ class ResultItem(scrapy.Item):
 
     test = scrapy.Field() 
 
+
+class RaceCardItem(ResultItem):
+    pass
+
 #More for initial test, and use specifically with racecards, as opposed to results.
 class HoresplayoneItem(scrapy.Item):
     

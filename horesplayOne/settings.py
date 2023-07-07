@@ -64,10 +64,10 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     #'horesplayOne.pipelines.HoresplayonePipeline': 300,
-    'horesplayOne.pipelines.DistancePipeline': 1,
+    'horesplayOne.pipelines.SetDefaultPipeline': 1,
     'horesplayOne.pipelines.SpPipeline': 2,
-    'horesplayOne.pipelines.DatatypePipeline': 3,
-    'horesplayOne.pipelines.SetDefaultPipeline': 4,
+    'horesplayOne.pipelines.DistancePipeline': 3,
+    'horesplayOne.pipelines.DatatypePipeline': 4,
     'horesplayOne.pipelines.DatabasePipeline': 5,
 }
 
