@@ -1,5 +1,6 @@
 import json
 import random
+
 #Strip down js string/window data, convert it to json to then return a value from a particular key
 #Section references a key with an array and index is used to acess that array.
 def jsStripper (jscript, key,section=0,index=0):
@@ -24,11 +25,14 @@ def jsStripper (jscript, key,section=0,index=0):
 #print(awnser)
 #Print(awnser2)
 """
+
+#Parse weights from Race Cards 
 def wgtStripper(wgtString):
 	start = wgtString.find('wgt="')
 	end = wgtString.find('">\n')
 	return wgtString[start + 5:end]
 
+#Get random samples from json files for testing
 def randomJsonSample(jsonFile):
 	with open(jsonFile,'r') as f:
 		data = json.load(f)
@@ -37,11 +41,13 @@ def randomJsonSample(jsonFile):
 		print(random.choice(data))
 		print('')
 
+#Load json file.
 def quickJson(jsonFile):
 	with open(jsonFile,'r') as f:
 		data = json.load(f)
 	return data
 
+#Parse Race titles and course name's to retrieve race_type from race cards. 
 def raceTypeGet(title,course_n):
 	B = ["inh flat", "national hunt flat","bumper"]
 	C = ['chase']

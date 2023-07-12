@@ -1,4 +1,5 @@
 import scrapy
+#from scrapy_selenium import SeleniumRequest
 from horesplayOne.items import ResultItem,RaceCardItem
 from horesplayOne.itemloaders import RaceCardLoader
 from horesplayOne.scrapeTools import wgtStripper, raceTypeGet

@@ -49,32 +49,22 @@ class ResultItem(scrapy.Item):
 class RaceCardItem(ResultItem):
     pass
 
-#More for initial test, and use specifically with racecards, as opposed to results.
+#Re-purposed to get odds from sites other than RP
 class HoresplayoneItem(scrapy.Item):
-    
     #Runner details
     h_name = scrapy.Field()
-    h_uid = scrapy.Field()
-    draw = scrapy.Field()
-    finish = scrapy.Field()
-    age  = scrapy.Field()
-    OR = scrapy.Field()
-    rpr = scrapy.Field()
-    ts = scrapy.Field() 
-    tr = scrapy.Field()
-    form = scrapy.Field()
-    #race details
-    course = scrapy.Field()
-    win_money = scrapy.Field()
-    no_runner = scrapy.Field()
-    going = scrapy.Field()
-    distance = scrapy.Field()
-    round_distance = scrapy.Field()
-    class_r = scrapy.Field()
-    #time/date
-    race_time = scrapy.Field()
+    course_n = scrapy.Field()
     race_date = scrapy.Field()
+    race_time = scrapy.Field()
 
+    odds_betfair = scrapy.Field()
+    odds_boylesports = scrapy.Field()
+    odds_paddypower = scrapy.Field()
+    odds_bet365 = scrapy.Field()
+    odds_williamhill = scrapy.Field()
+    odds_betvictor = scrapy.Field()
+    odds_betfred = scrapy.Field()
+    odds_sbk = scrapy.Field()
 #For use with posible pedegree features, eventually.  
 class HorseProfileItem(scrapy.Item):
 	h_name = scrapy.Field()

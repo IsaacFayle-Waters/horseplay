@@ -7,6 +7,9 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+# for Chrome driver 
+from shutil import which
+
 BOT_NAME = 'horesplayOne'
 
 SPIDER_MODULES = ['horesplayOne.spiders']
@@ -17,7 +20,7 @@ NEWSPIDER_MODULE = 'horesplayOne.spiders'
 #USER_AGENT = 'horesplayOne (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -48,6 +51,35 @@ ROBOTSTXT_OBEY = True
 #    'horesplayOne.middlewares.HoresplayoneSpiderMiddleware': 543,
 #}
 
+#SELENIUM_DRIVER_NAME = 'chrome'
+#SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
+#SELENIUM_DRIVER_ARGUMENTS=['--headless','--ignore-certificate-errors','--ignore-ssl-errors']  
+  
+#DOWNLOADER_MIDDLEWARES = {
+#     'scrapy_selenium.SeleniumMiddleware': 800
+#     }
+
+"""
+# Splash Server Endpoint
+SPLASH_URL = 'http://localhost:8050'
+
+
+# Enable Splash downloader middleware and change HttpCompressionMiddleware priority
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+
+# Enable Splash Deduplicate Args Filter
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
+# Define the Splash DupeFilter
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+"""
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
@@ -62,14 +94,21 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    #'horesplayOne.pipelines.HoresplayonePipeline': 300,
-    'horesplayOne.pipelines.SetDefaultPipeline': 1,
-    'horesplayOne.pipelines.SpPipeline': 2,
-    'horesplayOne.pipelines.DistancePipeline': 3,
-    'horesplayOne.pipelines.DatatypePipeline': 4,
-    'horesplayOne.pipelines.DatabasePipeline': 5,
-}
+
+ODDS_GET = True
+
+if ODDS_GET == True:
+	ITEM_PIPELINES = {
+	    'horesplayOne.pipelines.HoresplayonePipeline': 100,
+	}
+else:
+	ITEM_PIPELINES = {
+	    'horesplayOne.pipelines.SetDefaultPipeline': 200,
+	    'horesplayOne.pipelines.SpPipeline': 300,
+	    'horesplayOne.pipelines.DistancePipeline': 400,
+	    'horesplayOne.pipelines.DatatypePipeline': 500,
+	    'horesplayOne.pipelines.DatabasePipeline': 600,
+	}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
