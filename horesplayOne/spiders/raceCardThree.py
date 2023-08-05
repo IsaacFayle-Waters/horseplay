@@ -7,8 +7,17 @@ from horesplayOne.scrapeTools import wgtStripper, raceTypeGet
 
 class RacecardthreeSpider(scrapy.Spider):
     name = 'raceCardThree'
+    custom_settings = {
+        'ITEM_PIPELINES': {
+        'horesplayOne.pipelines.SetDefaultPipeline': 200,
+        'horesplayOne.pipelines.SpPipeline': 300,
+        'horesplayOne.pipelines.DistancePipeline': 400,
+        'horesplayOne.pipelines.DatatypePipeline': 500,
+        'horesplayOne.pipelines.DatabasePipeline': 600,
+    }
+    }
     allowed_domains = ['racingpost.com']
-    start_urls = ['http://racingpost.com/racecards/time-order']
+    start_urls = ['https://www.racingpost.com/racecards/time-order']
 
     def parse(self, response):
     	urls = response.css('.RC-meetingItem__link::attr(href)')

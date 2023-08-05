@@ -22,8 +22,6 @@ def jsStripper (jscript, key,section=0,index=0):
 
 #awnser =  jsStripper(jsstring,"wgtStNative",'items',1)
 #awnser2 = jsStripper(jsstring,'raceId')
-#print(awnser)
-#Print(awnser2)
 """
 
 #Parse weights from Race Cards 

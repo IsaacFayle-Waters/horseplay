@@ -9,6 +9,15 @@ TEST_INDEX = 0
 
 class ResultsSpider(scrapy.Spider):
     name = 'results'
+    custom_settings = {
+    'ITEM_PIPELINES' : {
+        'horesplayOne.pipelines.SetDefaultPipeline': 200,#not tested with results
+        'horesplayOne.pipelines.SpPipeline': 300,
+        'horesplayOne.pipelines.DistancePipeline': 400,
+        'horesplayOne.pipelines.DatatypePipeline': 500,
+        'horesplayOne.pipelines.DatabasePipeline': 600,
+    }
+    }
     allowed_domains = ['www.racingpost.com']
     
     #START FROM DATE PROVIDED ON CRAWL (i.e. scrapy crawl results -a date = 2023-05-30 )
@@ -62,8 +71,6 @@ class ResultsSpider(scrapy.Spider):
     	
     	if next_page is not None:
     		yield response.follow(next_page,callback = self.getUrls)
-
-
 
     #PARSE INFORMATION PER HORSE PER RACE    	
     async def parse(self, response):

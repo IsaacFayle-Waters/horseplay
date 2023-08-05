@@ -20,7 +20,7 @@ NEWSPIDER_MODULE = 'horesplayOne.spiders'
 #USER_AGENT = 'horesplayOne (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -95,7 +95,7 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
-ODDS_GET = True
+"""ODDS_GET = False
 
 if ODDS_GET == True:
 	ITEM_PIPELINES = {
@@ -109,6 +109,7 @@ else:
 	    'horesplayOne.pipelines.DatatypePipeline': 500,
 	    'horesplayOne.pipelines.DatabasePipeline': 600,
 	}
+"""
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

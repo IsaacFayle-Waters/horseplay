@@ -2,12 +2,14 @@
 from horesplayOne.scrapeToolsNonRP import getBookieString
 from horesplayOne.items import HoresplayoneItem
 import scrapy
-
-#def getBookieString(h_name,bookie):
-#  return '[data-runner="' + str(h_name) + '"]'+ ' [data-bookmaker="'+ bookie +'"] div::text'
-
+#TODO: FIX ERROR: Spider error processing <GET https://www.horseracing.net/newmarket/july-cup>
 class RacecardSpider(scrapy.Spider):
     name = 'raceCard'
+    custom_settings = {
+    'ITEM_PIPELINES': {
+      'horesplayOne.pipelines.HoresplayonePipeline': 100,
+      }
+    }
     start_urls =['https://www.horseracing.net/racecards']
     
     def parse(self,response):
@@ -20,7 +22,11 @@ class RacecardSpider(scrapy.Spider):
     
     def parse2(self, response):
           resRow = response.css('.results-row')
-          course,date,time = response.url.split('/')[3:]
+          if response.url.split('-')[-1] == 'cup':
+            course,date,time = response.css('.timeslot-link.active::attr(href)').get().split('/')[1:]
+          else:
+            course,date,time = response.url.split('/')[3:]
+          
           h_item =  HoresplayoneItem()
           for horse in resRow:
             name = horse.css('.person-name::text').get(default='').strip()
